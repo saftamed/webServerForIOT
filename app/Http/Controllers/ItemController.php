@@ -26,7 +26,7 @@ class ItemController extends Controller
                 $i->user_id =  $r["user_id"];
                 $i->action =  $r["action"];
                 $i->pin =  $r["pin"];
-                $i->value =  $r["value"];
+               // $i->value =  $r["value"];
                 $i->position =  $r["position"];
                 //$item->update(['name' => 'Test']);
                 $i->save();
@@ -48,7 +48,7 @@ class ItemController extends Controller
                 $i->user_id =  $r["user_id"];
                 $i->action =  $r["action"];
                 $i->pin =  $r["pin"];
-                $i->value =  $r["value"];
+                $i->value =  0;
                 $i->position =  $r["position"];
                 $i->save();
 

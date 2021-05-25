@@ -97,10 +97,13 @@
                   <span>{{item.option.name}}</span>
                   <span id="ss"  v-if="edit"><i class="fad fa-arrows-alt"></i></span>
                   </div>
-                  <div class="cc">
-
+                  <div class="cc" v-if="item.action=='D'">
+                  
                   <input type="checkbox" v-bind:id="'switch'+i+ii" v-model="item.value" true-value="1" false-value="0" />
                   <label @click="switchChange($event,ii,i)" v-bind:for="'switch'+i+ii" class="switch" :style="{background: item.value == 1 ?item.option.color:'gray'}"> <div :class="item.value == 1 ? 'pr-7':'pl-10'">{{ item.value == 1 ? 'ON':'OFF'}}</div></label>
+                </div>
+                <div class="cc" v-else> 
+                  <input v-bind:id="'switch'+i+ii" @change="switchChange($event,ii,i)" :style="{background:item.option.color}" v-model="item.value" class="rounded-lg ss overflow-hidden appearance-none bg-red-400 h-5 w-200" type="range" min="1" max="100" step="10"  /> 
                 </div>
                 </div>
             </div>
@@ -110,6 +113,10 @@
             <input type="checkbox" id="switch" /><label for="switch" class="switch">Toggle</label>
           </div> -->
         </div>
+
+
+
+
       </div>
     </div>
     <!-- /#page-content-wrapper -->
@@ -285,7 +292,7 @@
           },
           saveOptions(){
             if(!this.open){
-             var pos = $( "label[for='switch"+this.options.index+this.options.pos+"']" ).position();
+             var pos = $( "#switch"+this.options.index+this.options.pos).position();
               this.data[this.options.pos][this.options.index].pin = this.options.pin;
               this.data[this.options.pos][this.options.index].option.name =  this.options.name;
               this.data[this.options.pos][this.options.index].option.color = this.options.color;
@@ -339,12 +346,15 @@
           },
             switchChange(event,ii,i){
 
-              console.log(ii);
+              console.log(event.type);
                  if(!this.edit){
                    
                    if(this.connected){
                       var msg ={...this.data[ii][i]};
-                      msg.value= msg.value?0:1;
+                      if(event.type == "click"){
+
+                        msg.value= msg.value?0:1;
+                      }
                       delete msg.option;
                       console.log(msg);
 
@@ -384,6 +394,7 @@
               var c =[...this.data["left"],...this.data["center"],...this.data["right"]];
               $( "body .draggable" ).each(function( index ) {
                 const pos = $(this).position();
+                delete  c[index].value;
                 c[index].option={
                   top:pos.top,
                   left:pos.left,
@@ -444,7 +455,7 @@
              
             },connectToMqtt(){
               console.log("mqtt");
-                this.client = new Paho.MQTT.Client("192.168.1.15", 9001,"hh"+Math.floor(Math.random() * 11));
+                this.client = new Paho.MQTT.Client("localhost", 9001,"hh"+Math.floor(Math.random() * 11));
                 this.client.reconnect = true;
                 this.client.onConnectionLost = this.onConnectionLost;
                 this.client.onMessageArrived = this.onMessageArrived;
@@ -533,5 +544,22 @@ button i {
       font-size: 28px;
     font-weight: bold;
     text-shadow: 2px 10px 6px #2d2c2c;
+}
+input[type="range"]::-webkit-slider-thumb {
+  width: 20px;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 100vh;
+  background: #FFF;
+  box-shadow: 405px 0 0 400px #a7a7a7;
+  border-radius: 50%;
+
+}
+.ss{
+  width: 100%;
+    height: 38%;
+}
+.ui-widget-content.draggable {
+    height: 100%;
 }
 </style>
