@@ -35,9 +35,21 @@
                           <div id="com">Components</div>
                         </div>
                         <ul class="p-2 space-y-2 flex-1 overflow-auto" style="scrollbar-width: thin;">
-                            <li @click="addRelay">
+                            <li @click="addRelay('D')">
                                 <a href="#" class="flex space-x-2 items-center text-gray-600 p-2 bg-gray-200 rounded-lg">
                                     <span class="text-gray-900">Add Relay</span>
+                                    <i class="fal fa-toggle-on"></i>
+                                </a>
+                            </li>
+                             <li @click="addRelay('P')">
+                                <a href="#" class="flex space-x-2 items-center text-gray-600 p-2 bg-gray-200 rounded-lg">
+                                    <span class="text-gray-900">Add Slider</span>
+                                    <i class="fal fa-toggle-on"></i>
+                                </a>
+                            </li>
+                            <li @click="addRelay('I')">
+                                <a href="#" class="flex space-x-2 items-center text-gray-600 p-2 bg-gray-200 rounded-lg">
+                                    <span class="text-gray-900">Add Switch</span>
                                     <i class="fal fa-toggle-on"></i>
                                 </a>
                             </li>
@@ -97,14 +109,25 @@
                   <span>{{item.option.name}}</span>
                   <span id="ss"  v-if="edit"><i class="fad fa-arrows-alt"></i></span>
                   </div>
+
                   <div class="cc" v-if="item.action=='D'">
-                  
-                  <input type="checkbox" v-bind:id="'switch'+i+ii" v-model="item.value" true-value="1" false-value="0" />
-                  <label @click="switchChange($event,ii,i)" v-bind:for="'switch'+i+ii" class="switch" :style="{background: item.value == 1 ?item.option.color:'gray'}"> <div :class="item.value == 1 ? 'pr-7':'pl-10'">{{ item.value == 1 ? 'ON':'OFF'}}</div></label>
-                </div>
-                <div class="cc" v-else> 
-                  <input v-bind:id="'switch'+i+ii" @change="switchChange($event,ii,i)" :style="{background:item.option.color}" v-model="item.value" class="rounded-lg ss overflow-hidden appearance-none bg-red-400 h-5 w-200" type="range" min="1" max="100" step="10"  /> 
-                </div>
+                    <input type="checkbox" v-bind:id="'switch'+i+ii" v-model="item.value" true-value="1" false-value="0" />
+                    <label @click="switchChange($event,ii,i)" v-bind:for="'switch'+i+ii" class="switch" :style="{background: item.value == 1 ?item.option.color:'gray'}"> <div :class="item.value == 1 ? 'pr-7':'pl-10'">{{ item.value == 1 ? 'ON':'OFF'}}</div></label>
+                  </div>
+
+                   <div class="cc" v-else-if="item.action=='I'">
+                      <div class="led-box">
+                       <input type="checkbox" v-bind:id="'switch'+i+ii" v-model="item.value" true-value="1" false-value="0" />
+                    <label @click.prevent="" v-bind:for="'switch'+i+ii"  > <div class="led-green" :style="{background: item.value == 1 ?item.option.color:'gray'}">{{ item.value == 1 ? 'ON':'OFF'}}</div></label>
+                      </div>
+                      <div class="fg" v-if="edit"  @click="switchChange($event,ii,i)"></div>
+                  </div>
+
+                  <div class="cc" v-else> 
+                    <input v-bind:id="'switch'+i+ii" @change="switchChange($event,ii,i)" :style="{background:item.option.color}" v-model="item.value" class="rounded-lg ss overflow-hidden appearance-none bg-red-400 h-5 w-200" type="range" min="0" max="100" step="1"  /> 
+                    <div class="fg" v-if="!connected || edit"  @click="switchChange($event,ii,i)"></div>
+                  </div>
+
                 </div>
             </div>
           </div>
@@ -298,8 +321,11 @@
               this.data[this.options.pos][this.options.index].option.color = this.options.color;
               this.data[this.options.pos][this.options.index].position = this.options.position;
 
+              this.data[this.options.pos][this.options.index].action = this.options.action;
+
               this.data[this.options.pos][this.options.index].option.width = pos.width;
               this.data[this.options.pos][this.options.index].option.height = pos.height;
+              
 
               ['left','center','right'].forEach(pos => {
                 
@@ -308,7 +334,7 @@
             }else{
                 
                 this.data[this.options.position][this.data[this.options.position].length] ={
-                    action:"D",
+                    action:this.options.action,
                     pin:this.options.pin,
                     position:this.options.position,
                     value:0,
@@ -374,6 +400,7 @@
                      color:this.data[ii][i].option.color,
                      pin:this.data[ii][i].pin,
                      position:this.data[ii][i].position,
+                     action:this.data[ii][i].action,
                      index:i,
                      pos:ii
                       };
@@ -438,8 +465,8 @@
 
 
             },
-            addRelay(){
-              this.options={color:"red",position:"left",name:"new relay"};
+            addRelay(action="D"){
+              this.options={color:"red",position:"left",name:"new relay",action:action};
                 this.modalOpen = true;
                 // console.log(this.data);
                 // this.i++;
@@ -459,7 +486,7 @@
                 this.client.reconnect = true;
                 this.client.onConnectionLost = this.onConnectionLost;
                 this.client.onMessageArrived = this.onMessageArrived;
-                this.client.connect({onSuccess:this.onConnect ,keepAliveInterval : 12,reconnect:true});
+                this.client.connect({onSuccess:this.onConnect ,keepAliveInterval : 5,reconnect:true});
             }, onConnect() {
                 console.log("onConnect");
                 this.connected = true;
@@ -557,9 +584,47 @@ input[type="range"]::-webkit-slider-thumb {
 }
 .ss{
   width: 100%;
-    height: 38%;
+    height: 100%;
 }
 .ui-widget-content.draggable {
     height: 100%;
 }
+.fg{
+      position: absolute;
+    top: 0;
+    height: 100%;
+    width: 100%;
+}
+.led-box {
+  height: 100%;
+  width: 100%;
+  float: left;
+}
+
+.led-box p {
+  font-size: 12px;
+  text-align: center;
+}
+
+
+.led-green {
+  margin: 0 auto;
+  width: 100%;
+  height: 100%;
+  background-color: #ABFF00;
+  border-radius: 50%;
+  box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 7px 1px, inset #304701 0 -1px 9px;
+
+  display: flex;
+    align-items: center;
+    justify-content: center;
+
+      color: white;
+  padding: 10% 0px;
+  text-align: center;
+  font-size: 1.4rem;
+  font-weight: bold;
+}
+
+
 </style>

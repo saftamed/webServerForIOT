@@ -152,7 +152,7 @@ a,
 }
 .draggable{
   min-width: 120px;
-  min-height: 50px;
+  min-height: 30px;
   position: absolute;
   background: #f3f4f6;
 }
