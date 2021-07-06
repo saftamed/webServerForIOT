@@ -53,6 +53,13 @@
                                     <i class="fal fa-toggle-on"></i>
                                 </a>
                             </li>
+                            <li @click="addRelay('A')">
+                                <a href="#" class="flex space-x-2 items-center text-gray-600 p-2 bg-gray-200 rounded-lg">
+                                    <span class="text-gray-900">Add gauge</span>
+                                    <i class="fal fa-toggle-on"></i>
+                                </a>
+                            </li>
+                        
                         </ul>
                     </nav>
 				</div>
@@ -117,13 +124,25 @@
 
                    <div class="cc" v-else-if="item.action=='I'">
                       <div class="led-box">
-                       <input type="checkbox" v-bind:id="'switch'+i+ii" v-model="item.value" true-value="1" false-value="0" />
+                       <input type="checkbox" v-bind:id="'switch'+i+ii" v-model="item.value" true-value='"1"' false-value='"0"' />
                     <label @click.prevent="" v-bind:for="'switch'+i+ii"  > <div class="led-green" :style="{background: item.value == 1 ?item.option.color:'gray'}">{{ item.value == 1 ? 'ON':'OFF'}}</div></label>
                       </div>
                       <div class="fg" v-if="edit"  @click="switchChange($event,ii,i)"></div>
                   </div>
 
-                  <div class="cc" v-else> 
+
+                  <div class="cc" v-else-if="item.action=='A'">
+                     <div class="gauge__body" @click="switchChange($event,ii,i)">
+                      <div class="gauge__fill" :style="{transform:'rotate('+item.value*0.005+'turn)',background:item.option.color}">
+                        <div class="dm" style="
+                          border-top: 5px black solid;
+                          width: 30%;">
+                          </div>
+                      </div>
+                      <input type="number" v-bind:id="'switch'+i+ii" v-model="item.value" class="gauge__cover gauge" disabled :style="{color:item.option.color}">
+                    </div>
+                      </div>
+                 <div class="cc" v-else> 
                     <input v-bind:id="'switch'+i+ii" @change="switchChange($event,ii,i)" :style="{background:item.option.color}" v-model="item.value" class="rounded-lg ss overflow-hidden appearance-none bg-red-400 h-5 w-200" type="range" min="0" max="100" step="1"  /> 
                     <div class="fg" v-if="!connected || edit"  @click="switchChange($event,ii,i)"></div>
                   </div>
@@ -145,7 +164,9 @@
     <!-- /#page-content-wrapper -->
 
   </div>
-
+<div class="gauge">
+ 
+</div>
  <transition
       enter-active-class="transition duration-300 ease-out transform"
       enter-class="scale-95 opacity-0"
@@ -154,6 +175,9 @@
       leave-class="scale-100 opacity-100"
       leave-to-class="scale-95 opacity-0"
     >
+
+
+
       
   <!--Modal-->
   <div v-if="modalOpen" class="modal  z-50  fixed w-full h-full top-0 left-0 flex items-center justify-center">
@@ -183,6 +207,7 @@
               <div class="col-span-6 sm:col-span-3 my-5 ">
                 <label class="block text-sm font-medium text-gray-700">Select pin</label>
                 <select v-model="options.pin" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                <option value="0" selected>zero</option>
                   <option value="4" selected>four</option>
                   <option value="1">One</option>
                   <option value="2">Two</option>
@@ -238,6 +263,7 @@
         },
         data: function () {
             return {
+              value:26,
               connected:false,
               open: false,
               dimmer: true,
@@ -314,6 +340,8 @@
                 });
           },
           saveOptions(){
+                var msg ;
+
             if(!this.open){
              var pos = $( "#switch"+this.options.index+this.options.pos).position();
               this.data[this.options.pos][this.options.index].pin = this.options.pin;
@@ -330,6 +358,7 @@
               ['left','center','right'].forEach(pos => {
                 
               });
+              msg = {...this.data[this.options.pos][this.options.index]};
               this.$forceUpdate();
             }else{
                 
@@ -346,6 +375,7 @@
                     }
                 };
               this.open = false;
+              msg = {...this.data[this.options.position][this.data[this.options.position].length-1]};
               this.$forceUpdate();
                 this.$nextTick(function () {
                     if(this.edit){
@@ -355,6 +385,19 @@
                     console.log("updated");
                 });
             }
+                     
+               
+                         if(this.connected){
+                              delete msg.option;
+                     
+                      console.log(msg);
+
+                      var message = new Paho.MQTT.Message(JSON.stringify(msg));
+                      message.destinationName = "iot-2/"+this.params.code;
+                      this.client.send(message);
+
+                    }
+                
               this.modalOpen = false;
               
           },
@@ -379,10 +422,11 @@
                       var msg ={...this.data[ii][i]};
                       if(event.type == "click"){
 
-                        msg.value= msg.value?0:1;
+                        msg.value= msg.value=="1"?"0":"1";
                       }
                       delete msg.option;
                       console.log(msg);
+                      //msg.value = msg.value.toString();;
 
                       var message = new Paho.MQTT.Message(JSON.stringify(msg));
                       message.destinationName = "iot-2/"+this.params.code;
@@ -524,6 +568,15 @@
                 }
 
                 this.data[e.pos][e.index].value = d.value;
+               var msg = this.data[e.pos][e.index];
+                if(msg.id){
+
+                    if(d.action == "I" || d.action=="A"){
+                        axios.post('/items/update',msg).then(response =>{
+                          console.log(response);
+                        });
+                    }
+                }
                 
             }
 
@@ -624,6 +677,55 @@ input[type="range"]::-webkit-slider-thumb {
   text-align: center;
   font-size: 1.4rem;
   font-weight: bold;
+}
+.gauge {
+  width: 100%;
+  max-width: 250px;
+  font-family: "Roboto", sans-serif;
+  font-size: 32px;
+  color: #004033;
+  text-align: center;
+}
+
+.gauge__body {
+  width: 100%;
+  height: 0;
+  padding-bottom: 50%;
+  background: #b4c0be;
+  position: relative;
+  border-top-left-radius: 100% 200%;
+  border-top-right-radius: 100% 200%;
+  overflow: hidden;
+}
+
+.gauge__fill {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: inherit;
+  height: 100%;
+  background: #009578;
+  transform-origin: center top;
+ /* transform: rotate(0.25turn);*/
+  transition: transform 0.4s ease-out;
+}
+
+.gauge__cover {
+  width: 75%;
+  height: 150%;
+  background: #ffffff;
+  border-radius: 50%;
+  position: absolute;
+  top: 25%;
+  left: 50%;
+  transform: translateX(-50%);
+
+  /* Text */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 25%;
+  box-sizing: border-box;
 }
 
 
