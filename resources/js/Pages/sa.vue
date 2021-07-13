@@ -76,7 +76,6 @@
 					class="flex-1 bg-gray-400 bg-opacity-75 active:outline-none z-10 sm"
 				/>
 			</transition>
-
        <template #header>
           <button @click.prevent="starEdit"  v-if="!edit" class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded">
             Edit
@@ -232,6 +231,47 @@
           <label  class="block text-sm font-medium text-gray-700">Color</label>
           <input v-model="options.color" type="color" class="border-solid h-8 border-2 border-gray-300">
         </div>
+         <div class="col-span-6" v-if="options.action == 'D'">
+           <label class="inline-flex items-center">
+            <input v-model="options.time" type="checkbox" class="form-checkbox" >
+            <span class="ml-2">Timer Setting</span>
+          </label>
+         </div>
+        <div class="col-span-6" v-if="options.time">
+          <div>
+
+                <select v-model="TD[0]" class="mt-1  py-2 px-3 w-2/6 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    <option value="0" selected>Sunday</option>
+                    <option value="1">Monday</option>
+                    <option value="2">Tuesday</option>
+                    <option value="3">Wednesday</option>
+                    <option value="4">Thursday</option>
+                    <option value="5">Friday</option>
+                    <option value="6">Saturday</option>
+
+                </select>
+
+          <input type="number" v-model="TD[1]" name="Name"  autocomplete="Name" class="mt-1 w-20 focus:ring-indigo-500 focus:border-indigo-500  shadow-sm sm:text-sm border-gray-300 rounded-md">
+          <input type="number" v-model="TD[2]" name="Name"  autocomplete="Name" class="mt-1 w-20 focus:ring-indigo-500 focus:border-indigo-500  shadow-sm sm:text-sm border-gray-300 rounded-md">
+          </div>
+
+                <div>TO</div>
+<div>
+                <select v-model="TD[3]" class="mt-1 py-2 px-3 w-2/6 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    <option value="0" selected>Sunday</option>
+                    <option value="1">Monday</option>
+                    <option value="2">Tuesday</option>
+                    <option value="3">Wednesday</option>
+                    <option value="4">Thursday</option>
+                    <option value="5">Friday</option>
+                    <option value="6">Saturday</option>
+                </select>
+                         <input type="number" v-model="TD[4]" name="Name"  autocomplete="Name" class="mt-1 w-20 focus:ring-indigo-500 focus:border-indigo-500  shadow-sm sm:text-sm border-gray-300 rounded-md">
+          <input type="number" v-model="TD[5]" name="Name"  autocomplete="Name" class="mt-1 w-20 focus:ring-indigo-500 focus:border-indigo-500  shadow-sm sm:text-sm border-gray-300 rounded-md">
+
+</div>
+
+        </div>
         <button @click.prevent="deleteRelay" v-if="!open" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 border border-red-700 rounded">
           Delate
         </button>
@@ -280,14 +320,24 @@
                  color:"black",
                  name:"relay1",
                  index:0,
-                 position:"left"
-               },client:{},
+                 position:"left",
+                 o:"",
+                 time:false,
+               },
+               client:{},
                  modalOpen: false,
                  heights:[],
                  param:this.params
 
             }
         },
+          computed: {
+            // a computed getter
+            TD: function () {
+              // `this` points to the vm instance
+              return this.options.o.split(',');
+            }
+          },
         mounted() {
           axios.defaults.withCredentials = true;
          console.log(this.user);
@@ -353,11 +403,13 @@
 
               this.data[this.options.pos][this.options.index].option.width = pos.width;
               this.data[this.options.pos][this.options.index].option.height = pos.height;
-              
-
-              ['left','center','right'].forEach(pos => {
+              if(this.options.time)
+              this.data[this.options.pos][this.options.index].o= this.TD.join(",");
+              else
+              this.data[this.options.pos][this.options.index].o= "0";
+              // ['left','center','right'].forEach(pos => {
                 
-              });
+              // });
               msg = {...this.data[this.options.pos][this.options.index]};
               this.$forceUpdate();
             }else{
@@ -372,7 +424,8 @@
                       name:this.options.name,
                       color: this.options.color,
                       top:0,left:0,width:0,height:0,
-                    }
+                    },
+                    o:this.options.time?this.TD.join(","):"0",
                 };
               this.open = false;
               msg = {...this.data[this.options.position][this.data[this.options.position].length-1]};
@@ -445,6 +498,8 @@
                      pin:this.data[ii][i].pin,
                      position:this.data[ii][i].position,
                      action:this.data[ii][i].action,
+                     o:this.data[ii][i].o,
+                     time:this.data[ii][i].o.length > 6,
                      index:i,
                      pos:ii
                       };
@@ -562,6 +617,8 @@
                   if(e.pos != "a"){
                       console.log(e);
                     break;
+                  }else{
+                    return;
                   }
                     
                   

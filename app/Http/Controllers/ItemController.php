@@ -6,12 +6,13 @@ use App\Models\Option;
 use App\Models\Param;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+Use \Carbon\Carbon;
 class ItemController extends Controller
 {
     public function getItems($id)
     {
-        $pp =Item::where('user_id', $id)->with("option")->get(['id','user_id','action','pin','value','position']);
+
+        $pp =Item::where('user_id', $id)->with("option")->get(['id','user_id','action','pin','value','position','o']);
         $pp= $pp->groupBy('position');
         return response()->json($pp);
     }
@@ -26,7 +27,7 @@ class ItemController extends Controller
                 $i->user_id =  $r["user_id"];
                 $i->action =  $r["action"];
                 $i->pin =  $r["pin"];
-               // $i->value =  $r["value"];
+                $i->o =  $r["o"];
                 $i->position =  $r["position"];
                 //$item->update(['name' => 'Test']);
                 $i->save();
@@ -48,6 +49,7 @@ class ItemController extends Controller
                 $i->user_id =  $r["user_id"];
                 $i->action =  $r["action"];
                 $i->pin =  $r["pin"];
+                $i->o =  $r["o"];
                 $i->value =  0;
                 $i->position =  $r["position"];
                 $i->save();
@@ -70,7 +72,7 @@ class ItemController extends Controller
         $param->center = $req["params"]["center"];
         $param->save();
         
-        $pp =Item::where('user_id', Auth::id())->with("option")->get(['id','user_id','action','pin','value','position']);
+        $pp =Item::where('user_id', Auth::id())->with("option")->get(['id','user_id','action','pin','value','position','o']);
         $pp= $pp->groupBy('position');
         return response()->json($pp);
 
@@ -87,6 +89,11 @@ class ItemController extends Controller
     }
     public function getEspItems($id)
     {
+        date_default_timezone_set('Europe/London');  
+        // $time = date("Y-m-d H:i:s", time()); 
+        $mytime = Carbon::now();
+        $date = "{\"action\":\"R\",\"T\":\"".$mytime->dayOfWeek . $mytime->format(',d,m,y,H,i')."\"}";
+        //return $time;
         //return '{"a":5}';
         $i =Param::where('code', $id)->take(1)->get(['user_id']);
         if(isset($i[0]["user_id"])){
@@ -95,7 +102,9 @@ class ItemController extends Controller
             $i="null";
             return $i;
         }
-        $pp =Item::where('user_id', $i)->get(['id','action','pin','value']);
+        
+        $pp =Item::where('user_id', $i)->get(['id','action','pin','value','o']);
+        $pp[] =json_decode( $date);
         return response()->json($pp);
     }
     public function updateItem(Request $req)
