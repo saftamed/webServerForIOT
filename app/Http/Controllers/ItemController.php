@@ -49,7 +49,7 @@ class ItemController extends Controller
                 $i->user_id =  $r["user_id"];
                 $i->action =  $r["action"];
                 $i->pin =  $r["pin"];
-                $i->o =  $r["o"];
+                $i->o =  isset($r["o"])? $r["o"]: "0";
                 $i->value =  0;
                 $i->position =  $r["position"];
                 $i->save();
@@ -82,7 +82,7 @@ class ItemController extends Controller
     {
         $i = Item::find($req['id']);
         $i->delete();
-        $pp =Item::where('user_id', Auth::id())->with("option")->get(['id','user_id','action','pin','value','position']);
+        $pp =Item::where('user_id', Auth::id())->with("option")->get(['id','user_id','action','pin','value','position','o']);
         $pp= $pp->groupBy('position');
         return response()->json($pp);
 
@@ -92,7 +92,7 @@ class ItemController extends Controller
         date_default_timezone_set('Europe/London');  
         // $time = date("Y-m-d H:i:s", time()); 
         $mytime = Carbon::now();
-        $date = "{\"action\":\"R\",\"T\":\"".$mytime->dayOfWeek . $mytime->format(',d,m,y,H,i')."\"}";
+        $date = "{\"action\":\"R\",\"T\":\"".$mytime->dayOfWeek . $mytime->format(',d,m,y,H,i').",\"}";
         //return $time;
         //return '{"a":5}';
         $i =Param::where('code', $id)->take(1)->get(['user_id']);
