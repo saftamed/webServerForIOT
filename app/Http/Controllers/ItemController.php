@@ -77,7 +77,13 @@ class ItemController extends Controller
         return response()->json($pp);
 
     }
-
+    public function setting(Request $req)
+    {
+          $param = Param::find($req["id"]);
+        $param->debug = $req["debug"];
+        $param->host = $req["host"];
+        $param->save();
+    }
     public function deleteItem(Request $req)
     {
         $i = Item::find($req['id']);

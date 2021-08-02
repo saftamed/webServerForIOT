@@ -37,6 +37,7 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/wifi', function () {
 Route::middleware('auth:sanctum')->get('/items/{id}',[ItemController::class, 'getItems']);
 Route::get('/espitems/{id}',[ItemController::class, 'getEspItems']);
 Route::middleware('auth:sanctum')->post('/items/set',[ItemController::class, 'setItems']);
+Route::middleware('auth:sanctum')->post('/items/setting',[ItemController::class, 'setting']);
 Route::middleware('auth:sanctum')->post('/items/delete',[ItemController::class, 'deleteItem']);
 
 Route::middleware('auth:sanctum')->post('/items/update',[ItemController::class, 'updateItem']);
