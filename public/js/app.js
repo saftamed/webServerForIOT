@@ -17189,7 +17189,7 @@ __webpack_require__.r(__webpack_exports__);
   props: ['href', 'active'],
   computed: {
     classes: function classes() {
-      return this.active ? 'inline-flex items-center px-1 pt-1 border-b-2 border-indigo-400 text-sm font-medium leading-5 text-gray-900 focus:outline-none focus:border-indigo-700 transition' : 'inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium leading-5 text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition';
+      return this.active ? 'inline-flex ccm ca items-center px-1 pt-1 border-b-2 border-indigo-400 text-sm font-medium leading-5 text-gray-900 focus:outline-none focus:border-indigo-700 transition' : 'inline-flex ccm items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium leading-5 text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition';
     }
   }
 });
@@ -18540,6 +18540,7 @@ var pins = {
     var _this = this;
 
     console.log(pins);
+    this.dark(0);
     axios.defaults.withCredentials = true; //console.log(this.user);
 
     axios.get("/items/" + this.user.id, {}).then(function (response) {
@@ -18569,12 +18570,21 @@ var pins = {
     }); //this.switchChange("f");
   },
   methods: {
+    dark: function dark(a) {
+      //alert(this.params.dark);
+      if (this.params.dark == a) {
+        $(".ccm").removeClass("ccmDark");
+      } else {
+        $(".ccm").addClass("ccmDark");
+      }
+    },
     settingSave: function settingSave() {
       var _this2 = this;
 
       var k = {
         debug: this.params.debug,
         host: this.params.host,
+        dark: this.params.dark,
         id: this.params.id
       };
       axios.post("/items/setting", k).then(function (response) {
@@ -18588,7 +18598,7 @@ var pins = {
       }
 
       if (this.connected) {
-        delete k.id;
+        delete k.id, k.dark;
         k.action = "Z";
         var message = new Paho.MQTT.Message(JSON.stringify(k));
         message.destinationName = "iot-2/" + this.params.code;
@@ -20431,7 +20441,7 @@ var _hoisted_12 = {
 };
 var _hoisted_13 = {
   type: "button",
-  "class": "inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition"
+  "class": "inline-flex ccm items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition"
 };
 
 var _hoisted_14 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("svg", {
@@ -20511,7 +20521,7 @@ var _hoisted_33 = {
   "class": "bg-white shadow"
 };
 var _hoisted_34 = {
-  "class": "max-w-7xl mx-auto py-2 px-4 sm:px-6 lg:px-8"
+  "class": "max-w-7xl mx-auto py-2 px-4 sm:px-6 lg:px-8 ccm"
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_jet_banner = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("jet-banner");
@@ -23659,7 +23669,7 @@ var _hoisted_17 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(
 );
 
 var _hoisted_18 = {
-  "class": "d-flex",
+  "class": "d-flex ccm",
   id: "wrapper"
 };
 var _hoisted_19 = {
@@ -23672,7 +23682,7 @@ var _hoisted_21 = {
   id: "space"
 };
 var _hoisted_22 = {
-  "class": "mb-8 p-2 w-full flex flex-wrap bg-grey-light"
+  "class": "mb-8 p-2 w-full flex flex-wrap bg-grey-light ccm"
 };
 var _hoisted_23 = {
   "class": "title1"
@@ -23690,21 +23700,21 @@ var _hoisted_25 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(
 
 var _hoisted_26 = {
   key: 0,
-  "class": "cc"
+  "class": "cc ccm"
 };
 var _hoisted_27 = {
   "class": "daytimer"
 };
 var _hoisted_28 = {
   key: 1,
-  "class": "cc"
+  "class": "cc ccm"
 };
 var _hoisted_29 = {
   "class": "led-box"
 };
 var _hoisted_30 = {
   key: 2,
-  "class": "cc"
+  "class": "cc ccm"
 };
 
 var _hoisted_31 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
@@ -23719,7 +23729,7 @@ var _hoisted_31 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(
 
 var _hoisted_32 = {
   key: 3,
-  "class": "cc"
+  "class": "cc ccm"
 };
 var _hoisted_33 = {
   key: 0,
@@ -24029,6 +24039,19 @@ var _hoisted_90 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(
 );
 
 var _hoisted_91 = {
+  "class": "col-span-6"
+};
+var _hoisted_92 = {
+  "class": "inline-flex items-center"
+};
+
+var _hoisted_93 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", {
+  "class": "ml-2"
+}, "Dark Mode ?", -1
+/* HOISTED */
+);
+
+var _hoisted_94 = {
   "class": "\n                                bg-gray-50\n                                px-4\n                                py-3\n                                sm:px-6 sm:flex sm:flex-row-reverse\n                            "
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
@@ -24445,14 +24468,27 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             "false-value": "0"
           }, null, 512
           /* NEED_PATCH */
-          ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelCheckbox, _ctx.param.debug]]), _hoisted_90])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_91, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
+          ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelCheckbox, _ctx.param.debug]]), _hoisted_90])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_91, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("label", _hoisted_92, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
+            "onUpdate:modelValue": _cache[34] || (_cache[34] = function ($event) {
+              return _ctx.param.dark = $event;
+            }),
+            type: "checkbox",
+            "class": "form-checkbox",
+            "true-value": "1",
+            "false-value": "0",
+            onClick: _cache[35] || (_cache[35] = function ($event) {
+              return $options.dark(1);
+            })
+          }, null, 512
+          /* NEED_PATCH */
+          ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelCheckbox, _ctx.param.dark]]), _hoisted_93])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_94, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
             type: "button",
-            onClick: _cache[34] || (_cache[34] = function () {
+            onClick: _cache[36] || (_cache[36] = function () {
               return $options.settingSave && $options.settingSave.apply($options, arguments);
             }),
             "class": "\n                                    w-full\n                                    inline-flex\n                                    justify-center\n                                    rounded-md\n                                    border border-transparent\n                                    shadow-sm\n                                    px-4\n                                    py-2\n                                    bg-red-600\n                                    text-base\n                                    font-medium\n                                    text-white\n                                    hover:bg-red-700\n                                    focus:outline-none\n                                    focus:ring-2\n                                    focus:ring-offset-2\n                                    focus:ring-red-500\n                                    sm:ml-3 sm:w-auto sm:text-sm\n                                "
           }, " Save "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
-            onClick: _cache[35] || (_cache[35] = function ($event) {
+            onClick: _cache[37] || (_cache[37] = function ($event) {
               return _ctx.setting = false;
             }),
             type: "button",

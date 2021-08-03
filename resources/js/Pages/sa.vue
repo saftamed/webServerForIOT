@@ -247,13 +247,13 @@
             </span>
         </template>
 
-        <div class="d-flex" id="wrapper">
+        <div class="d-flex ccm" id="wrapper">
             <!-- Page Content -->
             <div id="page-content-wrapper">
                 <div class="container-fluid">
                     <div id="space">
                         <div
-                            class="mb-8 p-2 w-full flex flex-wrap bg-grey-light"
+                            class="mb-8 p-2 w-full flex flex-wrap bg-grey-light ccm"
                         >
                             <div
                                 class="
@@ -288,7 +288,7 @@
                                         ></span>
                                     </div>
 
-                                    <div class="cc" v-if="item.action == 'D'">
+                                    <div class="cc ccm" v-if="item.action == 'D'">
                                         <input
                                             type="checkbox"
                                             v-bind:id="'switch' + i + ii"
@@ -327,7 +327,7 @@
                                     </div>
 
                                     <div
-                                        class="cc"
+                                        class="cc ccm"
                                         v-else-if="item.action == 'I'"
                                     >
                                         <div class="led-box">
@@ -368,7 +368,7 @@
                                     </div>
 
                                     <div
-                                        class="cc"
+                                        class="cc ccm"
                                         v-else-if="item.action == 'A'"
                                     >
                                         <div
@@ -414,7 +414,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="cc" v-else>
+                                    <div class="cc ccm" v-else>
                                         <input
                                             v-bind:id="'switch' + i + ii"
                                             @change="
@@ -969,6 +969,20 @@
                                         <span class="ml-2">LCD Debug ?</span>
                                     </label>
                                 </div>
+
+                                                                <div class="col-span-6">
+                                    <label class="inline-flex items-center">
+                                        <input
+                                            v-model="param.dark"
+                                            type="checkbox"
+                                            class="form-checkbox"
+                                            true-value="1"
+                                            false-value="0"
+                                            @click="dark(1)"
+                                        />
+                                        <span class="ml-2">Dark Mode ?</span>
+                                    </label>
+                                </div>
                             </div>
                         </div>
                         <div
@@ -1114,8 +1128,10 @@ export default {
             heights: [],
             param: this.params,
             setting: false,
+            
         };
     },
+   
     computed: {
         // a computed getter
         TD: function () {
@@ -1127,6 +1143,7 @@ export default {
     },
     mounted() {
         console.log(pins);
+        this.dark(0);
         axios.defaults.withCredentials = true;
         //console.log(this.user);
         axios.get("/items/" + this.user.id, {}).then((response) => {
@@ -1156,10 +1173,19 @@ export default {
         //this.switchChange("f");
     },
     methods: {
+        dark(a){
+            //alert(this.params.dark);
+            if(this.params.dark == a){
+                $(".ccm").removeClass("ccmDark");
+            }else{
+                 $(".ccm").addClass("ccmDark");
+            }
+        },
         settingSave() {
             const k = {
                 debug: this.params.debug,
                 host: this.params.host,
+                dark:this.params.dark,
                 id: this.params.id,
             };
             axios.post("/items/setting", k).then((response) => {
@@ -1172,7 +1198,7 @@ export default {
                   this.connectToMqtt();
                }
             if(this.connected){
-               delete k.id;
+               delete k.id,k.dark;
                k.action = "Z";
                 var message = new Paho.MQTT.Message(JSON.stringify(k));
                 message.destinationName = "iot-2/" + this.params.code;
