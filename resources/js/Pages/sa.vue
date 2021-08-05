@@ -160,7 +160,7 @@
                     rounded
                 "
             >
-                Edit
+                Edit <i class="fas fa-edit"></i>
             </button>
 
             <button
@@ -181,6 +181,28 @@
             >
                 Setting <i class="fas fa-tools"></i>
             </button>
+
+
+              <button
+                @click.prevent="lcdMsg = true"
+                v-if="!edit & params.debug"
+                class="
+                    bg-blue-500
+                    hover:bg-blue-400
+                    text-white
+                    ml-1
+                    font-bold
+                    py-2
+                    px-4
+                    border-b-4 border-blue-700
+                    hover:border-blue-500
+                    rounded
+                "
+            >
+                Send Msg <i class="fas fa-envelope"></i>
+            </button>
+
+
             <button
                 @click="cancel"
                 v-if="edit"
@@ -901,15 +923,7 @@
                         aria-hidden="true"
                     ></div>
 
-                    <!-- This element is to trick the browser into centering the modal contents. -->
-                    <span
-                        class="
-                            hidden
-                            sm:inline-block sm:align-middle sm:h-screen
-                        "
-                        aria-hidden="true"
-                        >&#8203;</span
-                    >
+                    
 
                     <div
                         class="
@@ -943,6 +957,35 @@
                                         type="text"
                                         v-model="param.host"
                                         
+                                        class="
+                                            mt-1
+                                            focus:ring-indigo-500
+                                            focus:border-indigo-500
+                                            block
+                                            w-full
+                                            shadow-sm
+                                            sm:text-sm
+                                            border-gray-300
+                                            rounded-md
+                                        "
+                                    />
+                                </div>
+
+                                  <div class="col-span-6 mb-2">
+                                    <label
+                                        class="
+                                            block
+                                            text-sm
+                                            font-medium
+                                            text-gray-700
+                                        "
+                                        >Trigger Time</label
+                                    >
+                                    <input
+                                        type="number"
+                                        v-model="param.tri"
+                                        min="1000"
+                                        max="60000"
                                         class="
                                             mt-1
                                             focus:ring-indigo-500
@@ -1051,6 +1094,162 @@
                 </div>
             </div>
         </transition>
+
+        <transition
+            enter-active-class="transition duration-300 ease-out transform"
+            enter-class="scale-95 opacity-0"
+            enter-to-class="scale-100 opacity-100"
+            leave-active-class="transition duration-300 ease-in transform"
+            leave-class="scale-100 opacity-100"
+            leave-to-class="scale-95 opacity-0"
+        >
+            <div
+                class="fixed z-10 inset-0 overflow-y-auto"
+                aria-labelledby="modal-title"
+                role="dialog"
+                aria-modal="true"
+                v-if="lcdMsg"
+            >
+                <div
+                    class="
+                        flex
+                        items-end
+                        justify-center
+                        min-h-screen
+                        pt-4
+                        px-4
+                        pb-20
+                        text-center
+                        sm:block sm:p-0
+                    "
+                >
+                    <div
+                        @click="lcdMsg = false"
+                        class="
+                            fixed
+                            inset-0
+                            bg-gray-500 bg-opacity-75
+                            transition-opacity
+                        "
+                        aria-hidden="true"
+                    ></div>
+
+                    
+
+                    <div
+                        class="
+                            inline-block
+                            align-bottom
+                            bg-white
+                            rounded-lg
+                            text-left
+                            overflow-hidden
+                            shadow-xl
+                            transform
+                            transition-all
+                            sm:my-8 sm:align-middle sm:max-w-lg sm:w-full
+                        "
+                    >
+                        <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                            <p class="text-2xl font-bold">Send Message To LCD</p>
+
+                            <div class="mt-7">
+                                <div class="col-span-6 mb-2">
+                                    <label
+                                        class="
+                                            block
+                                            text-sm
+                                            font-medium
+                                            text-gray-700
+                                        "
+                                        >Message To Send</label
+                                    >
+                                    <input
+                                        type="text"
+                                        v-model="msg"
+                                        
+                                        maxlength="16"
+                                        class="
+                                            mt-1
+                                            focus:ring-indigo-500
+                                            focus:border-indigo-500
+                                            block
+                                            w-full
+                                            shadow-sm
+                                            sm:text-sm
+                                            border-gray-300
+                                            rounded-md
+                                        "
+                                    />
+                                </div>
+                            </div>
+                                    <div
+                            class="
+                                bg-gray-50
+                                px-4
+                                py-3
+                                sm:px-6 sm:flex sm:flex-row-reverse
+                            "
+                        >
+                            <button
+                                type="button"
+                                @click="sendMsg"
+                                class="
+                                    w-full
+                                    inline-flex
+                                    justify-center
+                                    rounded-md
+                                    border border-transparent
+                                    shadow-sm
+                                    px-4
+                                    py-2
+                                    bg-red-600
+                                    text-base
+                                    font-medium
+                                    text-white
+                                    hover:bg-red-700
+                                    focus:outline-none
+                                    focus:ring-2
+                                    focus:ring-offset-2
+                                    focus:ring-red-500
+                                    sm:ml-3 sm:w-auto sm:text-sm
+                                "
+                            >
+                                Save
+                            </button>
+                            <button
+                                @click="lcdMsg = false"
+                                type="button"
+                                class="
+                                    mt-3
+                                    w-full
+                                    inline-flex
+                                    justify-center
+                                    rounded-md
+                                    border border-gray-300
+                                    shadow-sm
+                                    px-4
+                                    py-2
+                                    bg-white
+                                    text-base
+                                    font-medium
+                                    text-gray-700
+                                    hover:bg-gray-50
+                                    focus:outline-none
+                                    focus:ring-2
+                                    focus:ring-offset-2
+                                    focus:ring-indigo-500
+                                    sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm
+                                "
+                            >
+                                Cancel
+                            </button>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </transition>
     </app-layout>
 </template>
 
@@ -1128,6 +1327,8 @@ export default {
             heights: [],
             param: this.params,
             setting: false,
+            lcdMsg:false,
+            msg:"",
             
         };
     },
@@ -1173,6 +1374,19 @@ export default {
         //this.switchChange("f");
     },
     methods: {
+        sendMsg(){
+             if(this.connected){
+                 const k = {
+                    action:"L",
+                    m:this.msg
+                };
+
+                var message = new Paho.MQTT.Message(JSON.stringify(k));
+                message.destinationName = "iot-2/" + this.params.code;
+                this.client.send(message);
+                console.log(k);
+            }
+        },
         dark(a){
             //alert(this.params.dark);
             if(this.params.dark == a){
@@ -1187,6 +1401,7 @@ export default {
                 host: this.params.host,
                 dark:this.params.dark,
                 id: this.params.id,
+                tri:this.params.tri
             };
             axios.post("/items/setting", k).then((response) => {
                 console.log(response);
@@ -1679,9 +1894,6 @@ export default {
 .res > .ui-resizable-e,
 .res > .ui-resizable-se {
     display: none !important;
-}
-button i {
-    /* font-size: 32px; */
 }
 
 #com {

@@ -83,6 +83,7 @@ class ItemController extends Controller
         $param->debug = $req["debug"];
         $param->host = $req["host"];
         $param->dark = $req["dark"];
+        $param->tri = $req["tri"];
         $param->save();
     }
     public function deleteItem(Request $req)
@@ -101,14 +102,14 @@ class ItemController extends Controller
         $date = "{\"action\":\"R\",\"T\":\"" . $mytime->dayOfWeek . $mytime->format(',d,m,y,H,i') . ",\"}";
         //return $time;
         //return '{"a":5}';
-        $i = Param::where('code', $id)->take(1)->get(['user_id', 'debug', 'host']);
+        $i = Param::where('code', $id)->take(1)->get(['user_id', 'debug', 'host','tri']);
         if (isset($i[0]["user_id"])) {
             $ii = $i[0]["user_id"];
         } else {
             $ii = "null";
             return $i;
         }
-        $pr = "{\"action\":\"Z\",\"debug\":" . $i[0]["debug"] . ",\"host\":\"" . $i[0]["host"] . "\"}";
+        $pr = "{\"action\":\"Z\",\"debug\":" . $i[0]["debug"] . ",\"host\":\"" . $i[0]["host"] . "\",\"tri\":". $i[0]["tri"] . "}";
         $pp = Item::where('user_id', $ii)->get(['id', 'action', 'pin', 'value', 'o']);
         $pp[] = json_decode($date);
         $pp[] = json_decode($pr);
