@@ -154,7 +154,8 @@ a,
   min-width: 120px;
   min-height: 30px;
   position: absolute;
-  background: #f3f4f6;
+  background: #f3f4f600;
+      max-width: 95%;
 }
 .draggable  .title1{
   position: absolute;
@@ -201,6 +202,7 @@ label.switch div{
 .cc{
   width: 100%;
   height: 100%;
+  position: relative;
 }
 label.switch:after {
   content: '';
@@ -265,8 +267,18 @@ font-size: 1.2rem;
 width: 15rem;
 }
 .ccmDark{
-  background-color: rgba(0, 0, 0, 1);
+  background-color: #1b1b1b;
   color: white;
+}
+.ccmDarkk{
+   background-color: #1b1b1b;
+}
+.ccmDark2{
+   background-color: #2d2d2d;
+  color: white;
+}
+.ccmtitle{
+ color: white !important;
 }
 #page-content-wrapper {
 min-width: 100vw;

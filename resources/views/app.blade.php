@@ -20,7 +20,9 @@
 
         <!-- Scripts -->
         @routes
+        <script>var safta = 235;</script>
         <script src="{{ asset('js/jquery-3.6.0.min.js')}}"></script>
+          <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
         <script src="{{ asset('js/jquery-ui.min.js')}}"></script>
         <script src="{{ asset('js/jquery.ui.touch-punch.min.js')}}"></script>
         <script src="{{ asset('js/mqtt.js')}}"></script>

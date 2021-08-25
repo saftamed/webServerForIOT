@@ -1,14 +1,128 @@
 <template>
-    <app-layout>
+    <app-layout v-bind:class="{ ccmDarkk: params.dark == '1' }">
         <!--Sidebar with Dimmer -->
         <div class="fixed inset-0 flex z-50 sd">
             <!-- Sidebar -->
             <div
-                class="absolute flex top-0 h-screen z-50"
-                :class="[
-                    right ? 'right-0 flex-row' : 'left-0 flex-row-reverse',
-                ]"
+                class="absolute flex top-0 h-screen z-50 left-0"
+                :class="right ? ' ' : ' '"
             >
+                <!-- Sidebar Content -->
+                <div
+                    ref="content"
+                    class="
+                        transition-all
+                        duration-700
+                        bg-yellow-200
+                        overflow-hidden
+                        flex
+                        items-center
+                        justify-center
+                    "
+                    :class="[open ? 'max-w-lg' : 'max-w-0']"
+                >
+                    <nav
+                        class="h-screen flex flex-col w-64 bg-gray-50"
+                        v-bind:class="{ side: params.dark == '1' }"
+                    >
+                        <div class="p-4">
+                            <div id="com">Components</div>
+                        </div>
+                        <ul
+                            class="p-2 space-y-2 flex-1 overflow-auto"
+                            style="scrollbar-width: thin"
+                        >
+                            <li @click="addRelay('D')">
+                                <div class="cc rr">
+                                    <input type="checkbox" />
+                                    <label
+                                        class="switch"
+                                        :style="{ background: '#32ff7e' }"
+                                    >
+                                        <div class="pl-7">ON</div>
+                                    </label>
+                                    <div class="daytimer">
+                                        Sunday at 02:04 => Friday at 10:00
+                                    </div>
+                                </div>
+                            </li>
+                            <li @click="addRelay('P')">
+                                <div class="cc pp">
+                                    <input
+                                        :style="{ background: '#17c0eb' }"
+                                        class="
+                                            rounded-lg
+                                            ss
+                                            overflow-hidden
+                                            appearance-none
+                                            bg-red-400
+                                            h-5
+                                            w-200
+                                        "
+                                        type="range"
+                                        min="0"
+                                        max="100"
+                                        step="1"
+                                    />
+                                    <div class="fg"></div>
+                                </div>
+                            </li>
+                            <li @click="addRelay('I')">
+                                <div class="cc ii">
+                                    <div class="led-box">
+                                        <input type="checkbox" />
+                                        <label>
+                                            <div
+                                                class="led-green"
+                                                :style="{
+                                                    background: '#ff4d4d',
+                                                }"
+                                            >
+                                                ON
+                                            </div></label
+                                        >
+                                    </div>
+                                </div>
+                            </li>
+                            <li @click="addRelay('A')">
+                                <div class="cc aa">
+                                    <div class="gauge__body">
+                                        <div
+                                            class="gauge__fill"
+                                            :style="{
+                                                transform: 'rotate(0.2turn)',
+                                                background: '#ff9f1a',
+                                            }"
+                                        >
+                                            <div
+                                                class="dm"
+                                                style="
+                                                    border-top: 5px black solid;
+                                                    width: 30%;
+                                                "
+                                            ></div>
+                                        </div>
+                                        <input
+                                            type="number"
+                                            value="40"
+                                            class="gauge__cover gauge"
+                                            disabled
+                                            :style="{ color: '#ff9f1a' }"
+                                        />
+                                    </div>
+                                </div>
+                            </li>
+
+                             <li @click="addRelay('C')">
+                                <div class="cc aa">
+                                    <img src="imgs/chart.jpg" alt="" srcset="">
+                                </div>
+                            </li>
+
+
+                        </ul>
+                    </nav>
+                </div>
                 <!--Drawer -->
                 <button
                     v-if="edit"
@@ -30,104 +144,6 @@
                         <i class="far fa-arrow-alt-from-left"></i>
                     </span>
                 </button>
-
-                <!-- Sidebar Content -->
-                <div
-                    ref="content"
-                    class="
-                        transition-all
-                        duration-700
-                        bg-yellow-200
-                        overflow-hidden
-                        flex
-                        items-center
-                        justify-center
-                    "
-                    :class="[open ? 'max-w-lg' : 'max-w-0']"
-                >
-                    <nav class="h-screen flex flex-col w-64 bg-gray-50">
-                        <div class="p-4">
-                            <div id="com">Components</div>
-                        </div>
-                        <ul
-                            class="p-2 space-y-2 flex-1 overflow-auto"
-                            style="scrollbar-width: thin"
-                        >
-                            <li @click="addRelay('D')">
-                                <a
-                                    href="#"
-                                    class="
-                                        flex
-                                        space-x-2
-                                        items-center
-                                        text-gray-600
-                                        p-2
-                                        bg-gray-200
-                                        rounded-lg
-                                    "
-                                >
-                                    <span class="text-gray-900">Add Relay</span>
-                                    <i class="fal fa-toggle-on"></i>
-                                </a>
-                            </li>
-                            <li @click="addRelay('P')">
-                                <a
-                                    href="#"
-                                    class="
-                                        flex
-                                        space-x-2
-                                        items-center
-                                        text-gray-600
-                                        p-2
-                                        bg-gray-200
-                                        rounded-lg
-                                    "
-                                >
-                                    <span class="text-gray-900"
-                                        >Add Slider</span
-                                    >
-                                    <i class="fal fa-toggle-on"></i>
-                                </a>
-                            </li>
-                            <li @click="addRelay('I')">
-                                <a
-                                    href="#"
-                                    class="
-                                        flex
-                                        space-x-2
-                                        items-center
-                                        text-gray-600
-                                        p-2
-                                        bg-gray-200
-                                        rounded-lg
-                                    "
-                                >
-                                    <span class="text-gray-900"
-                                        >Add Switch</span
-                                    >
-                                    <i class="fal fa-toggle-on"></i>
-                                </a>
-                            </li>
-                            <li @click="addRelay('A')">
-                                <a
-                                    href="#"
-                                    class="
-                                        flex
-                                        space-x-2
-                                        items-center
-                                        text-gray-600
-                                        p-2
-                                        bg-gray-200
-                                        rounded-lg
-                                    "
-                                >
-                                    <span class="text-gray-900">Add gauge</span>
-                                    <i class="fal fa-toggle-on"></i>
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
             </div>
         </div>
         <transition>
@@ -153,10 +169,8 @@
                     hover:bg-blue-400
                     text-white
                     font-bold
-                    py-2
-                    px-4
-                    border-b-4 border-blue-700
-                    hover:border-blue-500
+                    py-1
+                    px-3
                     rounded
                 "
             >
@@ -172,18 +186,15 @@
                     text-white
                     ml-1
                     font-bold
-                    py-2
-                    px-4
-                    border-b-4 border-blue-700
-                    hover:border-blue-500
+                    py-1
+                    px-3
                     rounded
                 "
             >
                 Setting <i class="fas fa-tools"></i>
             </button>
 
-
-              <button
+            <button
                 @click.prevent="lcdMsg = true"
                 v-if="!edit & params.debug"
                 class="
@@ -192,16 +203,13 @@
                     text-white
                     ml-1
                     font-bold
-                    py-2
-                    px-4
-                    border-b-4 border-blue-700
-                    hover:border-blue-500
+                    py-1
+                    px-3
                     rounded
                 "
             >
                 Send Msg <i class="fas fa-envelope"></i>
             </button>
-
 
             <button
                 @click="cancel"
@@ -212,8 +220,8 @@
                     hover:bg-blue-700
                     text-white
                     font-bold
-                    py-2
-                    px-4
+                    py-1
+                    px-3
                     rounded-full
                 "
             >
@@ -227,8 +235,8 @@
                     hover:bg-blue-700
                     text-white
                     font-bold
-                    py-2
-                    px-4
+                    py-1
+                    px-3
                     rounded-full
                 "
             >
@@ -269,25 +277,31 @@
             </span>
         </template>
 
-        <div class="d-flex ccm" id="wrapper">
+        <div
+            class="d-flex"
+            v-bind:class="{ ccmDark: params.dark == '1' }"
+            id="wrapper"
+        >
             <!-- Page Content -->
             <div id="page-content-wrapper">
                 <div class="container-fluid">
                     <div id="space">
                         <div
-                            class="mb-8 p-2 w-full flex flex-wrap bg-grey-light ccm"
+                            class="mb-8 p-2 w-full flex flex-wrap bg-grey-light"
+                            v-bind:class="{ ccmDark: params.dark == '1' }"
                         >
                             <div
                                 class="
                                     h-16
-                                    border-8
+                                    border-2
                                     res
+                                    ww
                                     w-full
                                     md:w-1/2
-                                    lg:w-1/3
                                     bg-grey
                                     rows
                                 "
+                                v-bind:class="{ ccmDark2: params.dark == '1' }"
                                 v-for="(ss, ii) in data"
                                 :key="ii"
                                 v-bind:style="{ height: param[ii] + 'px' }"
@@ -304,13 +318,23 @@
                                     }"
                                 >
                                     <div class="title1">
-                                        <span>{{ item.option.name }}</span>
-                                        <span id="ss" v-if="edit"
+                                        <span
+                                            v-bind:class="{
+                                                ccmtitle: params.dark == '1',
+                                            }"
+                                            >{{ item.option.name }}</span
+                                        >
+                                        <span
+                                            id="ss"
+                                            v-if="edit"
+                                            v-bind:class="{
+                                                ccmtitle: params.dark == '1',
+                                            }"
                                             ><i class="fad fa-arrows-alt"></i
                                         ></span>
                                     </div>
 
-                                    <div class="cc ccm" v-if="item.action == 'D'">
+                                    <div class="cc" v-if="item.action == 'D'">
                                         <input
                                             type="checkbox"
                                             v-bind:id="'switch' + i + ii"
@@ -343,13 +367,18 @@
                                                 }}
                                             </div></label
                                         >
-                                        <div class="daytimer">
+                                        <div
+                                            class="daytimer"
+                                            v-bind:class="{
+                                                ccmtitle: params.dark == '1',
+                                            }"
+                                        >
                                             {{ afficheTimer(item.o) }}
                                         </div>
                                     </div>
 
                                     <div
-                                        class="cc ccm"
+                                        class="cc"
                                         v-else-if="item.action == 'I'"
                                     >
                                         <div class="led-box">
@@ -390,7 +419,7 @@
                                     </div>
 
                                     <div
-                                        class="cc ccm"
+                                        class="cc"
                                         v-else-if="item.action == 'A'"
                                     >
                                         <div
@@ -436,7 +465,20 @@
                                         </div>
                                     </div>
 
-                                    <div class="cc ccm" v-else>
+                                    <div class="cc cha"  v-else-if="item.action == 'C'">
+                                        <div v-bind:id="'switch' + i + ii">
+
+                                       <chart   :b=" Analog(item.value,item.o)"  :w="item.option.width" :h="item.option.height"></chart>
+                                        </div>
+                                        
+                                        <div
+                                            class="fg"
+                                            v-if="edit"
+                                             @click="switchChange($event, ii, i)"
+                                        ></div>
+                                    </div>
+
+                                    <div class="cc" v-else>
                                         <input
                                             v-bind:id="'switch' + i + ii"
                                             @change="
@@ -640,7 +682,7 @@
                             </select>
                         </div>
                         <div
-                            v-if="options.action == 'A'"
+                            v-if="options.action == 'A' || options.action == 'C'"
                             class="col-span-6 sm:col-span-3 my-5"
                         >
                             <label
@@ -923,8 +965,6 @@
                         aria-hidden="true"
                     ></div>
 
-                    
-
                     <div
                         class="
                             inline-block
@@ -955,8 +995,7 @@
                                     >
                                     <input
                                         type="text"
-                                        v-model="param.host"
-                                        
+                                        v-model="params.host"
                                         class="
                                             mt-1
                                             focus:ring-indigo-500
@@ -971,7 +1010,7 @@
                                     />
                                 </div>
 
-                                  <div class="col-span-6 mb-2">
+                                <div class="col-span-6 mb-2">
                                     <label
                                         class="
                                             block
@@ -983,7 +1022,7 @@
                                     >
                                     <input
                                         type="number"
-                                        v-model="param.tri"
+                                        v-model="params.tri"
                                         min="1000"
                                         max="60000"
                                         class="
@@ -1003,7 +1042,7 @@
                                 <div class="col-span-6">
                                     <label class="inline-flex items-center">
                                         <input
-                                            v-model="param.debug"
+                                            v-model="params.debug"
                                             type="checkbox"
                                             class="form-checkbox"
                                             true-value="1"
@@ -1013,10 +1052,10 @@
                                     </label>
                                 </div>
 
-                                                                <div class="col-span-6">
+                                <div class="col-span-6">
                                     <label class="inline-flex items-center">
                                         <input
-                                            v-model="param.dark"
+                                            v-model="params.dark"
                                             type="checkbox"
                                             class="form-checkbox"
                                             true-value="1"
@@ -1134,8 +1173,6 @@
                         aria-hidden="true"
                     ></div>
 
-                    
-
                     <div
                         class="
                             inline-block
@@ -1151,7 +1188,9 @@
                         "
                     >
                         <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                            <p class="text-2xl font-bold">Send Message To LCD</p>
+                            <p class="text-2xl font-bold">
+                                Send Message To LCD
+                            </p>
 
                             <div class="mt-7">
                                 <div class="col-span-6 mb-2">
@@ -1167,7 +1206,6 @@
                                     <input
                                         type="text"
                                         v-model="msg"
-                                        
                                         maxlength="16"
                                         class="
                                             mt-1
@@ -1183,68 +1221,68 @@
                                     />
                                 </div>
                             </div>
-                                    <div
-                            class="
-                                bg-gray-50
-                                px-4
-                                py-3
-                                sm:px-6 sm:flex sm:flex-row-reverse
-                            "
-                        >
-                            <button
-                                type="button"
-                                @click="sendMsg"
+                            <div
                                 class="
-                                    w-full
-                                    inline-flex
-                                    justify-center
-                                    rounded-md
-                                    border border-transparent
-                                    shadow-sm
+                                    bg-gray-50
                                     px-4
-                                    py-2
-                                    bg-red-600
-                                    text-base
-                                    font-medium
-                                    text-white
-                                    hover:bg-red-700
-                                    focus:outline-none
-                                    focus:ring-2
-                                    focus:ring-offset-2
-                                    focus:ring-red-500
-                                    sm:ml-3 sm:w-auto sm:text-sm
+                                    py-3
+                                    sm:px-6 sm:flex sm:flex-row-reverse
                                 "
                             >
-                                Save
-                            </button>
-                            <button
-                                @click="lcdMsg = false"
-                                type="button"
-                                class="
-                                    mt-3
-                                    w-full
-                                    inline-flex
-                                    justify-center
-                                    rounded-md
-                                    border border-gray-300
-                                    shadow-sm
-                                    px-4
-                                    py-2
-                                    bg-white
-                                    text-base
-                                    font-medium
-                                    text-gray-700
-                                    hover:bg-gray-50
-                                    focus:outline-none
-                                    focus:ring-2
-                                    focus:ring-offset-2
-                                    focus:ring-indigo-500
-                                    sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm
-                                "
-                            >
-                                Cancel
-                            </button>
-                        </div>
+                                <button
+                                    type="button"
+                                    @click="sendMsg"
+                                    class="
+                                        w-full
+                                        inline-flex
+                                        justify-center
+                                        rounded-md
+                                        border border-transparent
+                                        shadow-sm
+                                        px-4
+                                        py-2
+                                        bg-red-600
+                                        text-base
+                                        font-medium
+                                        text-white
+                                        hover:bg-red-700
+                                        focus:outline-none
+                                        focus:ring-2
+                                        focus:ring-offset-2
+                                        focus:ring-red-500
+                                        sm:ml-3 sm:w-auto sm:text-sm
+                                    "
+                                >
+                                    Save
+                                </button>
+                                <button
+                                    @click="lcdMsg = false"
+                                    type="button"
+                                    class="
+                                        mt-3
+                                        w-full
+                                        inline-flex
+                                        justify-center
+                                        rounded-md
+                                        border border-gray-300
+                                        shadow-sm
+                                        px-4
+                                        py-2
+                                        bg-white
+                                        text-base
+                                        font-medium
+                                        text-gray-700
+                                        hover:bg-gray-50
+                                        focus:outline-none
+                                        focus:ring-2
+                                        focus:ring-offset-2
+                                        focus:ring-indigo-500
+                                        sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm
+                                    "
+                                >
+                                    Cancel
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1263,6 +1301,8 @@ var dragOptions = {
 };
 var resizOptions = { distance: 10, grid: [50, 20] };
 import AppLayout from "@/Layouts/AppLayout";
+import Chart from "@/Pages/chart";
+
 const pins = {
     D: {
         2: "R1",
@@ -1296,10 +1336,12 @@ export default {
     },
     components: {
         AppLayout,
+        Chart
     },
     data: function () {
         return {
             value: 26,
+            uuid:"123",
             connected: false,
             open: false,
             dimmer: true,
@@ -1327,12 +1369,11 @@ export default {
             heights: [],
             param: this.params,
             setting: false,
-            lcdMsg:false,
-            msg:"",
-            
+            lcdMsg: false,
+            msg: "",
         };
     },
-   
+
     computed: {
         // a computed getter
         TD: function () {
@@ -1343,7 +1384,7 @@ export default {
         },
     },
     mounted() {
-        console.log(pins);
+        // console.log(pins);
         this.dark(0);
         axios.defaults.withCredentials = true;
         //console.log(this.user);
@@ -1362,23 +1403,24 @@ export default {
             var result = this.data.left.map((a) => a.pin);
             result = result.concat(this.data.center.map((a) => a.pin));
             this.usedPins = result.concat(this.data.right.map((a) => a.pin));
-            //console.log(this.usedPins);
+            console.log(this.usedPins);
             // var v = [1,13];
             //         var result2  = result.filter(function(o){return !v.includes(o);} );
             //       console.log(result2);
             //this.generateData();
             //this.$forceUpdate();
+            //this.dark(0);
             this.connectToMqtt();
         });
 
         //this.switchChange("f");
     },
     methods: {
-        sendMsg(){
-             if(this.connected){
-                 const k = {
-                    action:"L",
-                    m:this.msg
+        sendMsg() {
+            if (this.connected) {
+                const k = {
+                    action: "L",
+                    m: this.msg,
                 };
 
                 var message = new Paho.MQTT.Message(JSON.stringify(k));
@@ -1387,34 +1429,35 @@ export default {
                 console.log(k);
             }
         },
-        dark(a){
+        dark(a) {
             //alert(this.params.dark);
-            if(this.params.dark == a){
+            if (this.params.dark == a) {
                 $(".ccm").removeClass("ccmDark");
-            }else{
-                 $(".ccm").addClass("ccmDark");
+                //this.params.dark = 0;
+            } else {
+                $(".ccm").addClass("ccmDark");
+                //this.params.dark = 1;
             }
         },
         settingSave() {
             const k = {
                 debug: this.params.debug,
                 host: this.params.host,
-                dark:this.params.dark,
+                dark: this.params.dark,
                 id: this.params.id,
-                tri:this.params.tri
+                tri: this.params.tri,
             };
             axios.post("/items/setting", k).then((response) => {
                 console.log(response);
                 this.setting = false;
             });
-              if(this.client._getHost() != k.host){
-                  if(this.connected)
-                 this.client.disconnect();
-                  this.connectToMqtt();
-               }
-            if(this.connected){
-               delete k.id,k.dark;
-               k.action = "Z";
+            if (this.client._getHost() != k.host) {
+                if (this.connected) this.client.disconnect();
+                this.connectToMqtt();
+            }
+            if (this.connected) {
+                delete k.id, k.dark;
+                k.action = "Z";
                 var message = new Paho.MQTT.Message(JSON.stringify(k));
                 message.destinationName = "iot-2/" + this.params.code;
                 this.client.send(message);
@@ -1485,6 +1528,8 @@ export default {
             return s.length == 1 ? "0" + s : s;
         },
         Analog(a, o) {
+            if(parseInt(a) =="NaN")
+            return -1000;
             if (o == "0") {
                 const R1 = 10000;
                 var logR2, R2, T;
@@ -1509,10 +1554,12 @@ export default {
                     action: "X",
                     id: this.options.id,
                 };
-                var message = new Paho.MQTT.Message(JSON.stringify(msg));
-                message.destinationName = "iot-2/" + this.params.code;
-                this.client.send(message);
-                console.log(msg);
+                if (this.connected) {
+                    var message = new Paho.MQTT.Message(JSON.stringify(msg));
+                    message.destinationName = "iot-2/" + this.params.code;
+                    this.client.send(message);
+                    console.log(msg);
+                }
                 axios.post("/items/delete", c).then((response) => {
                     $("body .draggable")
                         .draggable("destroy")
@@ -1557,6 +1604,7 @@ export default {
                 var pos = $(
                     "#switch" + this.options.index + this.options.pos
                 ).position();
+                console.log(pos);
                 this.data[this.options.pos][this.options.index].pin = parseInt(
                     this.options.pin
                 );
@@ -1584,7 +1632,7 @@ export default {
 
                 // });
                 msg = { ...this.data[this.options.pos][this.options.index] };
-                this.$forceUpdate();
+              //  this.$forceUpdate();
             } else {
                 this.data[this.options.position][
                     this.data[this.options.position].length
@@ -1597,7 +1645,7 @@ export default {
                     option: {
                         name: this.options.name,
                         color: this.options.color,
-                        top: 0,
+                        top: 25,
                         left: 0,
                         width: 0,
                         height: 0,
@@ -1669,7 +1717,7 @@ export default {
                 event.preventDefault();
             } else {
                 event.preventDefault();
-                var c = { ...pins[this.data[ii][i].action] };
+                var c = { ...pins[this.data[ii][i].action == "C"?"A":this.data[ii][i].action] };
                 var t = [...this.usedPins];
                 delete t[t.indexOf(this.data[ii][i].pin)];
                 console.log(t);
@@ -1752,6 +1800,7 @@ export default {
                 items: c,
                 params: this.param,
             };
+            console.log(k);
             // console.log(k);
 
             axios.post("/items/set", k).then((response) => {
@@ -1773,7 +1822,7 @@ export default {
             });
         },
         addRelay(action = "D") {
-            var c = { ...pins[action] };
+            var c = { ...pins[action == "C"?"A":action] };
             var t = [...this.usedPins];
             //console.log(Object.keys(c).filter(function(o){return !t.includes(4);} ));
             t.forEach((element) => {
@@ -1802,7 +1851,7 @@ export default {
         connectToMqtt() {
             console.log("mqtt");
             this.client = new Paho.MQTT.Client(
-               this.params.host,
+                this.params.host,
                 9001,
                 "hh" + Math.floor(Math.random() * 11)
             );
@@ -1854,7 +1903,7 @@ export default {
             this.data[e.pos][e.index].value = d.value;
             var msg = this.data[e.pos][e.index];
             if (msg.id) {
-                if (d.action == "I" || d.action == "A") {
+                if (d.action == "I" || d.action == "A" || d.action == "C") {
                     axios.post("/items/update", msg).then((response) => {
                         console.log(response);
                     });
@@ -1890,6 +1939,7 @@ export default {
 .rows {
     position: relative;
     height: 400px;
+    border-color: #848484;
 }
 .res > .ui-resizable-e,
 .res > .ui-resizable-se {
@@ -1926,7 +1976,6 @@ input[type="range"]::-webkit-slider-thumb {
 .led-box {
     height: 100%;
     width: 100%;
-    float: left;
 }
 
 .led-box p {
@@ -2006,5 +2055,38 @@ input[type="range"]::-webkit-slider-thumb {
     text-align: center;
     font-family: emoji;
     font-weight: bold;
+}
+
+.side {
+    background: #3c3c3c;
+    color: white;
+}
+.rr {
+    width: 182px;
+    margin: auto;
+}
+.pp {
+    height: 20px;
+    width: 70%;
+    margin: auto;
+}
+.aa {
+    width: 85%;
+    margin: auto;
+}
+.ii {
+    width: 150px;
+    height: 150px;
+    margin: auto;
+}
+.cha{
+        border-radius: 10px;
+    overflow: hidden;
+}
+@media (min-width: 1024px) {
+    .ww {
+        width: 33%;
+        margin: 2px;
+    }
 }
 </style>
