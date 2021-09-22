@@ -4,10 +4,10 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
-
-        <title>safta</title>
+        <title>IOT System</title>
 
         <!-- Fonts -->
+        <link rel="icon" href="/imgs/iot.png" type="image/png" sizes="16x16">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
         <link rel="stylesheet" href="{{ mix('css/app.css') }}">
         <link rel="stylesheet" href="{{asset('css/jquery-ui.css') }}">
@@ -22,7 +22,7 @@
         @routes
         <script>var safta = 235;</script>
         <script src="{{ asset('js/jquery-3.6.0.min.js')}}"></script>
-          <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+          <script src="{{ asset('js/plotly.js')}}"></script>
         <script src="{{ asset('js/jquery-ui.min.js')}}"></script>
         <script src="{{ asset('js/jquery.ui.touch-punch.min.js')}}"></script>
         <script src="{{ asset('js/mqtt.js')}}"></script>

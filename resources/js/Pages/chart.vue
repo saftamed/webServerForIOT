@@ -1,6 +1,6 @@
 <template>
     <div :ref="rm" ></div>
-    {{uuid}}
+ 
 </template>
 
 <script>
@@ -22,7 +22,7 @@ export default {
         var layout = {
             autosize: true,
             width: this.w,
-            height: this.h,
+            height: this.h-25,
             margin: {
                 l: 10,
                 r: 25,
@@ -100,7 +100,7 @@ export default {
         },
         h: function (h) {
          
-            var ll = { height: h };
+            var ll = { height: h-25 };
             Plotly.relayout(this.$refs[this.rm], ll);
         },
         w: function (w) {

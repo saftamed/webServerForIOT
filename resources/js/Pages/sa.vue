@@ -334,7 +334,7 @@
                                         ></span>
                                     </div>
 
-                                    <div class="cc" v-if="item.action == 'D'">
+                                    <div class="cc dd" v-if="item.action == 'D'">
                                         <input
                                             type="checkbox"
                                             v-bind:id="'switch' + i + ii"
@@ -470,6 +470,19 @@
 
                                        <chart   :b=" Analog(item.value,item.o)"  :w="item.option.width" :h="item.option.height"></chart>
                                         </div>
+                                        <div >
+                                            <div class="text-gray-500 px-2 py-1 border-0 rounded relative bg-blueGray-500"
+                                            v-bind:class="{
+                                                ccmtitle: params.dark == '1',
+                                            }">
+                                                <span class="text-xl inline-block mr-5 align-middle">
+                                                    <i class="fas fa-bell"></i>
+                                                </span>
+                                                <span class="inline-block align-middle mr-8" >
+                                                   Last Value :   <b>{{ Analog(item.value,item.o)}}</b>
+                                                </span>
+                                                </div>
+                                           </div>
                                         
                                         <div
                                             class="fg"
@@ -1673,7 +1686,9 @@ export default {
             }
 
             if (this.connected) {
-                delete msg.option;
+                   delete msg.option;
+                     delete msg.position;
+                     delete msg.user_id;
 
                 console.log(msg);
 
@@ -1703,7 +1718,9 @@ export default {
                     if (event.type == "click") {
                         msg.value = msg.value == "1" ? "0" : "1";
                     }
-                    delete msg.option;
+                     delete msg.option;
+                     delete msg.position;
+                     delete msg.user_id;
                     console.log(msg);
                     //msg.value = msg.value.toString();;
 
