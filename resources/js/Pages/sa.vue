@@ -1556,6 +1556,8 @@ export default {
                 T = (T * 9.0) / 5.0 + 32.0;
                 //console.log(T);
                 return parseFloat(T).toFixed(2);
+            }else{
+                return a;
             }
         },
         deleteRelay() {
@@ -1717,6 +1719,8 @@ export default {
                     var msg = { ...this.data[ii][i] };
                     if (event.type == "click") {
                         msg.value = msg.value == "1" ? "0" : "1";
+                    }else{
+                        msg.value = parseInt(msg.value * 1.8).toString();
                     }
                      delete msg.option;
                      delete msg.position;
@@ -1917,6 +1921,7 @@ export default {
                 console.log("index not found");
                 return;
             }
+            if(d.action != "P")
             this.data[e.pos][e.index].value = d.value;
             var msg = this.data[e.pos][e.index];
             if (msg.id) {

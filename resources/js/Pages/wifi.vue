@@ -14,7 +14,7 @@
                     </div>
                     <div v-else>
                         <button @click.prevent="nn=true" class="bg-transparent hover:bg-green-500 text-green-700 font-semibold hover:text-white py-2 px-4 border border-green-500 m-7 hover:border-transparent rounded">Try Agin </button>
-                        <iframe  src="http://192.168.1.184/" ></iframe>
+                        <iframe  src="http://192.168.4.1/" ></iframe>
                     </div>
                 </div>
             </div>

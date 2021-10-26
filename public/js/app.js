@@ -18821,6 +18821,8 @@ var pins = {
         T = T * 9.0 / 5.0 + 32.0; //console.log(T);
 
         return parseFloat(T).toFixed(2);
+      } else {
+        return a;
       }
     },
     deleteRelay: function deleteRelay() {
@@ -18959,6 +18961,8 @@ var pins = {
 
           if (event.type == "click") {
             msg.value = msg.value == "1" ? "0" : "1";
+          } else {
+            msg.value = parseInt(msg.value * 1.8).toString();
           }
 
           delete msg.option;
@@ -19160,7 +19164,7 @@ var pins = {
         return;
       }
 
-      this.data[e.pos][e.index].value = d.value;
+      if (d.action != "P") this.data[e.pos][e.index].value = d.value;
       var msg = this.data[e.pos][e.index];
 
       if (msg.id) {
@@ -24935,7 +24939,7 @@ var _hoisted_6 = {
 };
 
 var _hoisted_7 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("iframe", {
-  src: "http://192.168.1.184/"
+  src: "http://192.168.4.1/"
 }, null, -1
 /* HOISTED */
 );
